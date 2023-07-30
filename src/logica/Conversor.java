@@ -192,4 +192,223 @@ public class Conversor {
         
         return resultConversion;
     }
+    
+    public String[] valoresTemperatura(){
+        String[] valueCboTemperatura = {
+            "Seleccione: ",
+            "Celsius",
+            "Fahrenheit",
+            "Kelvin"
+        };
+        return valueCboTemperatura;
+    }
+    
+    public BigDecimal Temperatura(double cantidad, int escalaOrigen, int escalaDestino){
+        double result;
+        
+        switch (escalaOrigen) {
+            case 1:
+                switch (escalaDestino) {
+                    case 2:
+                        result = (cantidad * 9/5) + 32;
+                        break;
+                    case 3:
+                        result = (cantidad + 273.15);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 2:
+                switch (escalaDestino) {
+                    case 1:
+                        result = (cantidad - 32)* 5/9;        
+                        break;  
+                    case 3:
+                        result = (cantidad - 32)* 5/9 + 273.15;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 3:
+                switch (escalaDestino) {
+                    case 1:
+                        result = cantidad - 273.15;
+                        break;
+                    case 2:
+                        result = (cantidad - 273.15) * 9/5 + 32;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            default:
+                throw new AssertionError();
+        }
+        
+        // Convertir el resultado en un BigDecimal
+        BigDecimal resultConversion = BigDecimal.valueOf(result);
+        
+        // Redondear el resultado a dos decimales sin redondeo
+        resultConversion = resultConversion.setScale(2, RoundingMode.DOWN);
+        
+        return resultConversion;
+    }
+    
+    public String[] valoresDistancia(){
+        String[] valueCboTemperatura = {
+            "Seleccione: ",
+            "Kilometros",
+            "Millas",
+            "Metros",
+            "Yardas",
+            "Pies",
+            "Centimetros"
+        };
+        return valueCboTemperatura;
+    }
+    
+    public BigDecimal distancia(double cantidad, int distanciaOrigen, int distanciaDestino){
+        double result;
+        
+        switch (distanciaOrigen) {
+            case 1:
+                switch (distanciaDestino) {
+                    case 2:
+                        result = cantidad / 1.609;
+                        break;
+                    case 3:
+                        result = cantidad * 1000;
+                        break;
+                    case 4:
+                        result = cantidad * 1904;
+                        break;
+                    case 5:
+                        result = cantidad * 3281;
+                        break;
+                    case 6:
+                        result = cantidad * 100000;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 2:
+                switch (distanciaDestino) {
+                    case 1:
+                        result = cantidad * 1.609;
+                        break;
+                    case 3:
+                        result = cantidad * 1609;
+                        break;
+                    case 4:
+                        result = cantidad * 1760;
+                        break;
+                    case 5:
+                        result = cantidad * 5280;
+                        break;
+                    case 6:
+                        result = cantidad * 160900;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 3:
+                switch (distanciaDestino) {
+                    case 1:
+                        result = cantidad / 1000;
+                        break;
+                    case 2:
+                        result = cantidad / 1609;
+                        break;
+                    case 4:
+                        result = cantidad * 1.094;
+                        break;
+                    case 5:
+                        result = cantidad * 3.281;
+                        break;
+                    case 6:
+                        result = cantidad * 100;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 4:
+                switch (distanciaDestino) {
+                    case 1:
+                        result = cantidad / 1094;
+                        break;
+                    case 2:
+                        result = cantidad / 1760;
+                        break;
+                    case 3:
+                        result = cantidad / 1.094;
+                        break;
+                    case 5:
+                        result = cantidad * 3;
+                        break;
+                    case 6:
+                        result = cantidad * 91.44;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 5:
+                switch (distanciaDestino) {
+                    case 1:
+                        result = cantidad / 3281;
+                        break;
+                    case 2:
+                        result = cantidad / 5280;
+                        break;
+                    case 3:
+                        result = cantidad / 3.281;
+                        break;
+                    case 4:
+                        result = cantidad / 3;
+                        break;
+                    case 6:
+                        result = cantidad * 30.48;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            case 6:
+                switch (distanciaDestino) {
+                    case 1:
+                        result = cantidad / 100000;
+                        break;
+                    case 2:
+                        result = cantidad / 160900;
+                        break;
+                    case 3:
+                        result = cantidad / 100;
+                        break;
+                    case 4:
+                        result = cantidad / 91.44;
+                        break;
+                    case 5:
+                        result = cantidad / 30.48;
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+                break;
+            default:
+                throw new AssertionError();
+        }
+        
+        // Convertir el resultado en un BigDecimal
+        BigDecimal resultConversion = BigDecimal.valueOf(result);
+        
+        // Redondear el resultado a dos decimales sin redondeo
+        resultConversion = resultConversion.setScale(6, RoundingMode.DOWN);
+        
+        return resultConversion;
+    }
 }

@@ -1,8 +1,13 @@
 package igu;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.math.BigDecimal;
+import java.util.Hashtable;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import logica.Conversor;
+import logica.JComboBoxRender;
 
 /**
  *
@@ -11,13 +16,33 @@ import logica.Conversor;
 public class Menu extends javax.swing.JFrame {
 
     Conversor conversor = new Conversor();
+    
+    Hashtable<Object, ImageIcon> mElementos;
+    int width = 20;
+    int height = 20;
+    
+    private String logo_sol = "/icons/peru.png";
+    private String logo_dolar = "/icons/estados-unidos-de-america.png";
+    private String logo_UE = "/icons/union-europea.png";
+    private String logo_libraE = "/icons/reino-unido.png";
+    private String logo_yen = "/icons/japon.png";
+    private String logo_won = "/icons/corea-del-sur.png";
 
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        mElementos = new Hashtable<>();
 
+        //Cargando cbo de divisas
+        agregarElemento("Sol", getIcono(logo_sol));
+        agregarElemento("Dólar", getIcono(logo_dolar));
+        agregarElemento("Euro", getIcono(logo_UE));
+        agregarElemento("Libra Esterlina", getIcono(logo_libraE));
+        agregarElemento("Yen Japones", getIcono(logo_yen));
+        agregarElemento("Won sul-coreano", getIcono(logo_won));
+        
         String[] valoresCboDivisa = conversor.valoresDivisas();
         cboDeDivisa.removeAllItems();
         cboADivisa.removeAllItems();
@@ -26,7 +51,47 @@ public class Menu extends javax.swing.JFrame {
             cboDeDivisa.addItem(element);
             cboADivisa.addItem(element);
         }
+        
+        JComboBoxRender mJComboBoxRender = new JComboBoxRender(mElementos);
+        cboDeDivisa.setRenderer(mJComboBoxRender);
+        cboADivisa.setRenderer(mJComboBoxRender);
+        
+        //Cargando cbo de temperatura
+        String[] valoresCboTemperatura = conversor.valoresTemperatura();
+        cboDeTemp.removeAllItems();
+        cboATemp.removeAllItems();
+        for (int i = 0; i < valoresCboTemperatura.length; i++) {
+            String element = valoresCboTemperatura[i];
+            cboDeTemp.addItem(element);
+            cboATemp.addItem(element);
+        }
+        
+        //Cargando cbo de distancia
+        String[] valoresCboDeDistancia = conversor.valoresDistancia();
+        cboDeDistancia.removeAllItems();
+        cboADistancia.removeAllItems();
+        for (int i = 0; i < valoresCboDeDistancia.length; i++) {
+            String element = valoresCboDeDistancia[i];
+            cboDeDistancia.addItem(element);
+            cboADistancia.addItem(element);
+        }
 
+        setIconImage(getIconImage());
+    }
+    
+    @Override
+    public Image getIconImage() {
+        Image retvalue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("icons/monedas.png"));
+        return retvalue;
+    }
+    
+    public void agregarElemento(String akey, ImageIcon aImageIcon) {
+        mElementos.put(akey, aImageIcon);
+    }
+
+    public ImageIcon getIcono(String path) {
+        return new ImageIcon(new ImageIcon(getClass().getResource(path)).getImage()
+                .getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
     }
 
     /**
@@ -117,6 +182,7 @@ public class Menu extends javax.swing.JFrame {
         cboADivisa.setForeground(new java.awt.Color(51, 29, 44));
         cboADivisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        btnLimpiarDivisas.setForeground(new java.awt.Color(51, 29, 44));
         btnLimpiarDivisas.setText("Limpiar");
         btnLimpiarDivisas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,11 +201,10 @@ public class Menu extends javax.swing.JFrame {
                         .addGap(101, 101, 101)
                         .addGroup(jPanelCurrencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnLimpiarDivisas, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                            .addGroup(jPanelCurrencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnConvertirDivisa, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnConvertirDivisa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(33, 33, 33)
                         .addGroup(jPanelCurrencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanelCurrencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -209,10 +274,16 @@ public class Menu extends javax.swing.JFrame {
 
         btnConvertirTemp.setForeground(new java.awt.Color(51, 29, 44));
         btnConvertirTemp.setText("Convertir");
+        btnConvertirTemp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConvertirTempActionPerformed(evt);
+            }
+        });
 
         lblResultadoTemp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblResultadoTemp.setForeground(new java.awt.Color(0, 0, 0));
 
+        btnLimpiarT.setForeground(new java.awt.Color(51, 29, 44));
         btnLimpiarT.setText("Limpiar");
         btnLimpiarT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,20 +300,19 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(0, 4, Short.MAX_VALUE))
             .addGroup(jPanelTemperatureLayout.createSequentialGroup()
                 .addGap(105, 105, 105)
+                .addGroup(jPanelTemperatureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnLimpiarT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelTemperatureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConvertirTemp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanelTemperatureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpiarT)
-                    .addGroup(jPanelTemperatureLayout.createSequentialGroup()
-                        .addGroup(jPanelTemperatureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnConvertirTemp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanelTemperatureLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboDeTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCantidadTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboATemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblResultadoTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(cboDeTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCantidadTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboATemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblResultadoTemp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelTemperatureLayout.setVerticalGroup(
@@ -302,10 +372,16 @@ public class Menu extends javax.swing.JFrame {
 
         btnConvertirDistan.setForeground(new java.awt.Color(51, 29, 44));
         btnConvertirDistan.setText("Convertir");
+        btnConvertirDistan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConvertirDistanActionPerformed(evt);
+            }
+        });
 
         lblResultadoDistan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblResultadoDistan.setForeground(new java.awt.Color(0, 0, 0));
 
+        btnLimpiarDistancia.setForeground(new java.awt.Color(51, 29, 44));
         btnLimpiarDistancia.setText("Limpiar");
         btnLimpiarDistancia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -323,20 +399,19 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanelDistanceLayout.createSequentialGroup()
                 .addGap(113, 113, 113)
+                .addGroup(jPanelDistanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnLimpiarDistancia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelDistanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConvertirDistan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanelDistanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpiarDistancia)
-                    .addGroup(jPanelDistanceLayout.createSequentialGroup()
-                        .addGroup(jPanelDistanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnConvertirDistan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanelDistanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboDeDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLongitusDist, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboADistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblResultadoDistan, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(cboDeDistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLongitusDist, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboADistancia, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblResultadoDistan, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelDistanceLayout.setVerticalGroup(
@@ -438,6 +513,48 @@ public class Menu extends javax.swing.JFrame {
         cboADistancia.setSelectedIndex(0);
         lblResultadoDistan.setText("");
     }//GEN-LAST:event_btnLimpiarDistanciaActionPerformed
+
+    private void btnConvertirTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConvertirTempActionPerformed
+        try {
+            double cantidad = Double.parseDouble(txtCantidadTemp.getText());
+            int escalaOrigen = cboDeTemp.getSelectedIndex();
+            int escalaDestino = cboATemp.getSelectedIndex();
+
+            BigDecimal valorConvertido = conversor.Temperatura(cantidad, escalaOrigen, escalaDestino);
+            lblResultadoTemp.setText(valorConvertido + "");
+        } catch (AssertionError e) {
+            //Manejo de Error si es que queremos mostrarlo tal como es
+            /*String mensajeError = "Error: " + e.getClass().getName() + ": " + e.getMessage();
+            JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);*/
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un item valido en las TEMPERATURAS", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            //Manejo de Error si es que queremos mostrarlo tal como es
+            /*String mensajeError = "Error: " + e.getClass().getName() + ": " + e.getMessage();
+            JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);*/
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad a convertir", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnConvertirTempActionPerformed
+
+    private void btnConvertirDistanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConvertirDistanActionPerformed
+        try {
+            double cantidad = Double.parseDouble(txtLongitusDist.getText());
+            int distanciaOrigen = cboDeDistancia.getSelectedIndex();
+            int distanciaDestino = cboADistancia.getSelectedIndex();
+
+            BigDecimal valorConvertido = conversor.distancia(cantidad, distanciaOrigen, distanciaDestino);
+            lblResultadoDistan.setText(valorConvertido + "");
+        } catch (AssertionError e) {
+            //Manejo de Error si es que queremos mostrarlo tal como es
+            /*String mensajeError = "Error: " + e.getClass().getName() + ": " + e.getMessage();
+            JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);*/
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un item valido en las LONGITUDES", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            //Manejo de Error si es que queremos mostrarlo tal como es
+            /*String mensajeError = "Error: " + e.getClass().getName() + ": " + e.getMessage();
+            JOptionPane.showMessageDialog(null, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);*/
+            JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad a convertir", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnConvertirDistanActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

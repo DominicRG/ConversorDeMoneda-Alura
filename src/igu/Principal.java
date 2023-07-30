@@ -5,6 +5,8 @@
 package igu;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -25,8 +27,15 @@ public class Principal extends javax.swing.JFrame {
         lblCurrency.setIcon(currencyIcon);
         
         btnEntrar.setBackground(new java.awt.Color(0,0,0,0));
+        
+        setIconImage(getIconImage());
     }
 
+    @Override
+    public Image getIconImage() {
+        Image retvalue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("icons/monedas.png"));
+        return retvalue;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
