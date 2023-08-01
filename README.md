@@ -1,6 +1,6 @@
 # AppConversor
 
-![AppConversor Logo](inserta_aqui_la_ruta_de_tu_imagen.png)
+![monedas](https://github.com/DominicRG/ConversorDeMoneda-Alura/assets/77859275/7d5b6968-d238-46df-b861-5e11cfaf2803)
 
 ## Descripción
 
