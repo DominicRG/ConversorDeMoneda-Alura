@@ -1,6 +1,6 @@
 # AppConversor
 
-![monedas](https://github.com/DominicRG/ConversorDeMoneda-Alura/assets/77859275/7d5b6968-d238-46df-b861-5e11cfaf2803)
+![currency](https://github.com/DominicRG/ConversorDeMoneda-Alura/assets/77859275/b687fff5-4066-45f3-9c8f-bf4d576bb1f5)
 
 ## Descripción
 
